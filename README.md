@@ -52,7 +52,8 @@ The performances of CFG together with some selected GNN-based methods on OGB-CIT
     | NGNN + SEAL       |  0.8891 ± 0.0022        |  0.8879 ± 0.0022          | 
     | SIEG  |  0.8987 ± 0.0018 | 0.8978 ± 0.0018 | 
     | CFG1   |  **0.8997 ± 0.0015** |  **0.8987 ± 0.0011** | 
-    | CFG2   | **bridge** |  **bridge** | 
+
+
 CFG achieves **top-1** performance on ogbl-citation2 in current OGB Link Property Prediction Leader Board until [**Sep 14, 2023**](https://ogb.stanford.edu/docs/leader_linkprop/). 
 
 
