@@ -39,7 +39,7 @@ or
     sh train_citation2.sh
 
 ## Results
-The performances of PSG together with other GNN-based methods on OGB-DDI task are listed as below:
+The performances of CFG together with some selected GNN-based methods on OGB-CITATION2 task are listed as below:
 
 
  | Method         | Test MRR  | Validation MRR             |
