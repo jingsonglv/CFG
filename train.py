@@ -270,8 +270,6 @@ def train(num_datas):
                     g.undir_ra = g.undir_ra.to(device)
                 if args.use_cnb_swing:
                     g.undir_swing = g.undir_swing.to(device)
-                if args.use_cnb_bridge:
-                    g.undir_bridge = g.undir_bridge.to(device)
                 if args.use_degree:
                     g.undir_degree = g.undir_degree.to(device)
                     if directed:
@@ -351,8 +349,6 @@ def test_model(model, loader, num_datas):
                     g.undir_ra = g.undir_ra.to(device)
                 if args.use_cnb_swing:
                     g.undir_swing = g.undir_swing.to(device)
-                if args.use_cnb_bridge:
-                    g.undir_bridge = g.undir_bridge.to(device)
                 if args.use_degree:
                     g.undir_degree = g.undir_degree.to(device)
                     if directed:
@@ -714,7 +710,6 @@ parser.add_argument('--use_cnb_jac', action='store_true', default=False)
 parser.add_argument('--use_cnb_aa', action='store_true', default=False)
 parser.add_argument('--use_cnb_ra', action='store_true', default=False)
 parser.add_argument('--use_cnb_swing', action='store_true', default=False)
-parser.add_argument('--use_cnb_bridge', action='store_true', default=False)
 parser.add_argument('--use_cnb_cc', action='store_true', default=False)
 parser.add_argument('--use_cnb_cv', action='store_true', default=False)
 parser.add_argument('--use_degree', action='store_true', default=False)
@@ -955,7 +950,6 @@ preprocess_fn = partial(preprocess_func,
                         use_cnb_aa=args.use_cnb_aa,
                         use_cnb_ra=args.use_cnb_ra,
                         use_cnb_swing=args.use_cnb_swing,
-                        use_cnb_bridge=args.use_cnb_bridge,
                         use_degree=args.use_degree,
                         gravity_type=args.gravity_type,
                 )  if args.model.find('Graphormer') != -1 else None
@@ -1344,8 +1338,6 @@ elif args.ngnn_code:
                 batched_g.undir_ra = torch.cat([g_noaug.pair_undir_ra for g_noaug in g_noaugs], dim=0)
             if args.use_cnb_swing:
                 batched_g.undir_swing = torch.cat([g_noaug.pair_undir_swing for g_noaug in g_noaugs], dim=0)
-            if args.use_cnb_bridge:
-                batched_g.undir_bridge = torch.cat([g_noaug.pair_undir_bridge for g_noaug in g_noaugs], dim=0)
             if args.use_degree:
                 batched_g.undir_degree = torch.cat([g_noaug.pair_undir_degree for g_noaug in g_noaugs], dim=0)
                 if directed:

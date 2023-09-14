@@ -178,7 +178,6 @@ def preprocess(data, degree, **kwargs):
     use_cnb_aa = kwargs["use_cnb_aa"] if "use_cnb_aa" in kwargs else False
     use_cnb_ra = kwargs["use_cnb_ra"] if "use_cnb_ra" in kwargs else False
     use_cnb_swing = kwargs["use_cnb_swing"] if "use_cnb_swing" in kwargs else False
-    use_cnb_bridge = kwargs["use_cnb_bridge"] if "use_cnb_bridge" in kwargs else False
     use_degree = kwargs["use_degree"] if "use_degree" in kwargs else False
     gravity_type = kwargs["gravity_type"] if "gravity_type" in kwargs else 0
     directed = kwargs["directed"] if "directed" in kwargs else False
@@ -216,7 +215,6 @@ def preprocess(data, degree, **kwargs):
     pair_undir_aa = torch.zeros((num_pair, 2, 2), dtype=torch.float32)
     pair_undir_ra = torch.zeros((num_pair, 2, 2), dtype=torch.float32)
     pair_undir_swing = torch.zeros((num_pair, 2, 2), dtype=torch.float32)
-    pair_undir_bridge = torch.zeros((num_pair, 2, 2), dtype=torch.float32)
     if gravity_type > 0:
         pair_paths_weight = torch.zeros((num_pair, 2, 2, num_rules), dtype=torch.float)
         pair_paths_log_weight = torch.zeros((num_pair, 2, 2, num_rules), dtype=torch.float)
@@ -270,9 +268,6 @@ def preprocess(data, degree, **kwargs):
             if use_cnb_swing:
                 swing_value = swing_m(G_undirected, src_idx, dst_idx)
                 pair_undir_swing[i] = swing_value
-            if use_cnb_bridge:
-                bridge_value = bridge(G_undirected, src_idx, dst_idx)
-                pair_undir_bridge[i] = bridge_value
         except nx.exception.NetworkXNoPath:
             # No way between these two points
             pair_len_shortest_path[i] = np.iinfo('long').max
@@ -284,7 +279,6 @@ def preprocess(data, degree, **kwargs):
         pair_undir_aa[i].fill_diagonal_(0)
         pair_undir_ra[i].fill_diagonal_(0)
         pair_undir_swing[i].fill_diagonal_(0)
-        pair_undir_bridge[i].fill_diagonal_(0)
 
     if use_len_spd:
         data.pair_len_shortest_path = pair_len_shortest_path.to(device)
@@ -298,8 +292,6 @@ def preprocess(data, degree, **kwargs):
         data.pair_undir_ra = pair_undir_ra.to(device)
     if use_cnb_swing:
         data.pair_undir_swing = pair_undir_swing.to(device)
-    if use_cnb_bridge:
-        data.pair_undir_bridge = pair_undir_bridge.to(device)
     if gravity_type > 0:
         data.pair_paths_weight = pair_paths_weight.to(device)
         data.pair_paths_log_weight = pair_paths_log_weight.to(device)

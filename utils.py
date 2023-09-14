@@ -764,19 +764,6 @@ def swing_m(G, v1, v2):
     return swing_value
 
 
-def bridge(G, v1, v2):
-    c_list = nx.cycle_basis(G)
-    bridge_value = 0.0
-    if G.has_edge(v1, v2):
-        bridge_value = 1.0
-    circles_cnt = 0.0
-    for circle_element in c_list:
-        if v1 in circle_element and v2 in circle_element:
-            circles_cnt += 1.0
-    bridge_value += np.tanh(circles_cnt) / 2.0 + 1.0 / (1 + np.exp(-circles_cnt)) - 0.5
-    return bridge_value
-
-
 class Logger(object):
     def __init__(self, runs, info=None):
         self.info = info

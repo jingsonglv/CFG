@@ -143,7 +143,6 @@ class Graphormer(nn.Module):
         use_cnb_aa=False,
         use_cnb_ra=False,
         use_cnb_swing=False,
-        use_cnb_bridge=False,
         use_degree=False,
         mul_bias=False,
         gravity_type=0,
@@ -164,7 +163,6 @@ class Graphormer(nn.Module):
         self.use_cnb_aa = use_cnb_aa
         self.use_cnb_ra = use_cnb_ra
         self.use_cnb_swing = use_cnb_swing
-        self.use_cnb_bridge = use_cnb_bridge
         self.use_degree = use_degree
         self.gravity_type = gravity_type
         self.atom_encoder = nn.Linear(input_dim, hidden_dim)
@@ -192,9 +190,6 @@ class Graphormer(nn.Module):
             if use_cnb_swing:
                 self.undir_swing_encoder_query = nn.Embedding(40, hidden_dim, padding_idx=0)
                 self.undir_swing_encoder_key = nn.Embedding(40, hidden_dim, padding_idx=0)
-            if use_cnb_bridge:
-                self.undir_bridge_encoder_query = nn.Embedding(40, hidden_dim, padding_idx=0)
-                self.undir_bridge_encoder_key = nn.Embedding(40, hidden_dim, padding_idx=0)
             # 固定0，不可学习
             self.padding1 = nn.Parameter(torch.zeros(1, self.num_heads, 1, 1, self.att_size), requires_grad=False)
             self.padding2 = nn.Parameter(torch.zeros(1, self.num_heads, 1, 1, self.att_size), requires_grad=False)
@@ -214,8 +209,6 @@ class Graphormer(nn.Module):
                 self.undir_ra_encoder = nn.Embedding(40, num_heads, padding_idx=0)
             if use_cnb_swing:
                 self.undir_swing_encoder = nn.Embedding(40, num_heads, padding_idx=0)
-            if use_cnb_bridge:
-                self.undir_bridge_encoder = nn.Embedding(40, num_heads, padding_idx=0)
         if use_degree:  # 点上的特征不需要两套
             self.in_degree_encoder = nn.Embedding(64, hidden_dim, padding_idx=0)
             self.out_degree_encoder = nn.Embedding(64, hidden_dim, padding_idx=0)
@@ -270,9 +263,6 @@ class Graphormer(nn.Module):
             if self.use_cnb_swing:
                 self.undir_swing_encoder_query.reset_parameters()
                 self.undir_swing_encoder_key.reset_parameters()
-            if self.use_cnb_bridge:
-                self.undir_bridge_encoder_query.reset_parameters()
-                self.undir_bridge_encoder_key.reset_parameters()
         else:
             if self.use_len_spd:
                 self.len_shortest_path_encoder.reset_parameters()
@@ -286,8 +276,6 @@ class Graphormer(nn.Module):
                 self.undir_ra_encoder.reset_parameters()
             if self.use_cnb_swing:
                 self.undir_swing_encoder.reset_parameters()
-            if self.use_cnb_bridge:
-                self.undir_bridge_encoder.reset_parameters()
         if self.gravity_type in [1, 2, 3]:
             self.path_rule_lin.reset_parameters()
         if self.use_degree:
@@ -348,10 +336,6 @@ class Graphormer(nn.Module):
                 undir_swing_enc = torch.clamp(data.undir_swing*10, min=0, max=39).long()
                 spatial_pos_query += self.undir_swing_encoder_query(undir_swing_enc).reshape(n_graph, n_node, n_node, self.att_size, self.num_heads).permute(0, 4, 1, 2, 3)
                 spatial_pos_key += self.undir_swing_encoder_key(undir_swing_enc).reshape(n_graph, n_node, n_node, self.att_size, self.num_heads).permute(0, 4, 1, 2, 3)
-            if self.use_cnb_bridge:
-                undir_bridge_enc = torch.clamp(data.undir_bridge*10, min=0, max=39).long()
-                spatial_pos_query += self.undir_bridge_encoder_query(undir_bridge_enc).reshape(n_graph, n_node, n_node, self.att_size, self.num_heads).permute(0, 4, 1, 2, 3)
-                spatial_pos_key += self.undir_bridge_encoder_key(undir_bridge_enc).reshape(n_graph, n_node, n_node, self.att_size, self.num_heads).permute(0, 4, 1, 2, 3)
             padding1_batch, padding2_batch = self.padding1.repeat(n_graph, 1, 1, n_node, 1), self.padding2.repeat(n_graph, 1, n_node+1, 1, 1)
             # [n_graph, n_head, n_node, n_node, att_size] -> [n_graph, n_head, n_node+1, n_node+1, att_size]
             spatial_pos_query = torch.cat((padding2_batch, torch.cat((padding1_batch, spatial_pos_query), dim=2)), dim=3)
@@ -378,9 +362,6 @@ class Graphormer(nn.Module):
             if self.use_cnb_swing:
                 undir_swing_enc = torch.clamp(data.undir_swing*10, min=0, max=39).long()
                 spatial_pos_bias += self.undir_swing_encoder(undir_swing_enc).permute(0, 3, 1, 2)
-            if self.use_cnb_bridge:
-                undir_bridge_enc = torch.clamp(data.undir_bridge*10, min=0, max=39).long()
-                spatial_pos_bias += self.undir_bridge_encoder(undir_bridge_enc).permute(0, 3, 1, 2)
 
         if self.gravity_type == 1:
             spatial_pos_bias = spatial_pos_bias + self.path_rule_lin(data.paths_weight).permute(0, 3, 1, 2)

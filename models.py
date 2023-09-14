@@ -1540,7 +1540,6 @@ class NGNNDGCNNGraphormer_noNeigFeat(torch.nn.Module):
                                      use_cnb_aa=args.use_cnb_aa,
                                      use_cnb_ra=args.use_cnb_ra,
                                      use_cnb_swing=args.use_cnb_swing,
-                                     use_cnb_bridge=args.use_cnb_bridge,
                                      use_degree=args.use_degree,
                                      mul_bias=args.mul_bias,
                                      gravity_type=args.gravity_type)
