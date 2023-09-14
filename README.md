@@ -42,16 +42,16 @@ or
 The performances of CFG together with some selected GNN-based methods on OGB-CITATION2 task are listed as below:
 
 
- | Method         | Test MRR  | Validation MRR             |
+| Method         | Test MRR  | Validation MRR             |
 | ---------- | :-----------:  | :-----------: |
-    |  PLNLP    |  0.8492 ± 0.0029          |  0.8490 ± 0.0031          | 
-    | AGDN w/GraphSAINT  |  0.8549 ± 0.0029          |  0.8556 ± 0.0033        | 
-    | SEAL                |  0.8767 ± 0.0032        | 0.8757 ± 0.0031        |
-    | S3GRL (PoS Plus)  | 0.8814 ± 0.0008 | 0.8809 ± 0.0074 | 
-    | SUREL |  0.8883 ± 0.0018         |  0.8891 ± 0.0021       | 
-    | NGNN + SEAL       |  0.8891 ± 0.0022        |  0.8879 ± 0.0022          | 
-    | SIEG  |  0.8987 ± 0.0018 | 0.8978 ± 0.0018 | 
-    | CFG1   |  **0.8997 ± 0.0015** |  **0.8987 ± 0.0011** | 
+|  PLNLP    |  0.8492 ± 0.0029          |  0.8490 ± 0.0031          | 
+| AGDN w/GraphSAINT  |  0.8549 ± 0.0029          |  0.8556 ± 0.0033        | 
+| SEAL                |  0.8767 ± 0.0032        | 0.8757 ± 0.0031        |
+| S3GRL (PoS Plus)  | 0.8814 ± 0.0008 | 0.8809 ± 0.0074 | 
+| SUREL |  0.8883 ± 0.0018         |  0.8891 ± 0.0021       | 
+| NGNN + SEAL       |  0.8891 ± 0.0022        |  0.8879 ± 0.0022          | 
+| SIEG  |  0.8987 ± 0.0018 | 0.8978 ± 0.0018 | 
+| CFG1   |  **0.8997 ± 0.0015** |  **0.8987 ± 0.0011** | 
 
 
 CFG achieves **top-1** performance on ogbl-citation2 in current OGB Link Property Prediction Leader Board until [**Sep 14, 2023**](https://ogb.stanford.edu/docs/leader_linkprop/). 
