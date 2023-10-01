@@ -38,6 +38,12 @@ or
 
     sh train_citation2.sh
 
+#### CFG v2  
+
+    python3 train.py --ngnn_code --grpe_cross --device 0  --num_heads 8 --dataset ogbl-citation2 --use_feature --use_feature_GT --use_edge_weight --epochs 20 --train_percent 8 --val_percent 4 --test_percent 0.2 --model NGNNDGCNNGraphormer_noNeigFeat --runs 10 --batch_size 64 --lr 2e-05 --num_workers 24 --dynamic_train --dynamic_val --dynamic_test --use_len_spd --use_num_spd --use_cnb_jac --use_cnb_aa --use_cnb_bridge
+
+
+
 ## Results
 The performances of CFG together with some selected GNN-based methods on OGB-CITATION2 task are listed as below:
 
@@ -52,6 +58,7 @@ The performances of CFG together with some selected GNN-based methods on OGB-CIT
 | NGNN + SEAL   |  0.8891 ± 0.0022        |  0.8879 ± 0.0022          | 
 | SIEG  |  0.8987 ± 0.0018 | 0.8978 ± 0.0018 | 
 | CFG1   |  **0.8997 ± 0.0015** |  **0.8987 ± 0.0011** | 
+| CFG2  |  **0.9003 ± 0.0007** |  **0.8992 ± 0.0007** | 
 
 
 CFG achieves **top-1** performance on ogbl-citation2 in current OGB Link Property Prediction Leader Board until [**Sep 14, 2023**](https://ogb.stanford.edu/docs/leader_linkprop/). 
